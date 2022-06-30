@@ -14,52 +14,34 @@ const NavBar = () => {
         to="/product"
         className="block h-16 leading-[4rem] border-b-4 border-transparent hover:text-red-700 hover:border-current"
       >
-        Products
+        Completed Task
       </Link>
 
       <a
         href="/products"
         className="block h-16 leading-[4rem] border-b-4 border-transparent hover:text-red-700 hover:border-current"
       >
-        About Us
+        To-Do
       </a>
 
       <a
         href="/contact"
         className="block h-16 leading-[4rem] border-b-4 border-transparent hover:text-red-700 hover:border-current"
       >
-        Contact
+        Calendar
       </a>
     </>
   );
   return (
-    <div className="sticky top-0 z-20">
+    <div className="sticky top-0 z-20 hover:bg-white text-white hover:text-gray-600">
     <header className="shadow-sm bg-opacity-40 backdrop-blur-md ">
       <div className="flex items-center justify-between h-16 max-w-screen-xl px-4 mx-auto">
         <div className="flex flex-1 w-0 lg:hidden">
-          <button
-            className="p-2 text-gray-600 bg-gray-100 rounded-full"
-            type="button"
-          >
-             <svg
-              class="w-5 h-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-              />
-            </svg>
-          </button>
+
         </div>
 
         <div className="flex items-center space-x-4">
-          <h1 className="font-bold lg:text-2xl text-xs md:text-xl">Mama Bhagina Car LTD</h1>
+          <h1 className="font-bold lg:text-2xl text-3xl md:text-xl lg:ml-4">Todo list App</h1>
         </div>
         {/* dropdown here on small device */}
         <div className="flex justify-end flex-1 w-0 lg:hidden ml-2">
