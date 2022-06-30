@@ -1,7 +1,18 @@
+import { signOut } from "firebase/auth";
 import React from "react";
-import { Link } from "react-router-dom";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { Link, useNavigate } from "react-router-dom";
+import auth from "../../../firebase.init";
 
 const NavBar = () => {
+  const navigate = useNavigate();
+  const [user] = useAuthState(auth);
+  const logout = () =>{
+    signOut(auth);
+     navigate('/login')
+    localStorage.removeItem('accessToken');
+ 
+  }
   const navLink = (
     <>
       <Link
@@ -11,25 +22,26 @@ const NavBar = () => {
         Home
       </Link>
       <Link
-        to="/product"
+        to="/to-do"
+        className="block h-16 leading-[4rem] border-b-4 border-transparent hover:text-red-700 hover:border-current"
+      >
+        To-Do
+      </Link>
+      <Link
+        to="/complete-task"
         className="block h-16 leading-[4rem] border-b-4 border-transparent hover:text-red-700 hover:border-current"
       >
         Completed Task
       </Link>
 
-      <a
-        href="/products"
-        className="block h-16 leading-[4rem] border-b-4 border-transparent hover:text-red-700 hover:border-current"
-      >
-        To-Do
-      </a>
+      
 
-      <a
-        href="/contact"
+      <Link
+        to="/calender"
         className="block h-16 leading-[4rem] border-b-4 border-transparent hover:text-red-700 hover:border-current"
       >
         Calendar
-      </a>
+      </Link>
     </>
   );
   return (
@@ -82,11 +94,7 @@ const NavBar = () => {
                   </Link>
                 </div>
                 <div className="items-center space-y-4 mt-4">
-                  <Link
-                    className="px-5 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg"
-                    to="/signup">
-                    Sign up
-                  </Link>
+              
                 </div>
               </div>
             </ul>
@@ -98,50 +106,53 @@ const NavBar = () => {
         </nav>
 
         <div className="items-center hidden space-x-4 lg:flex">
-          <Link
-            className="px-5 py-2 text-sm font-medium text-gray-600 bg-gray-100 rounded-lg"
-            to="/login"
-          >
-            Log in
-          </Link>
-          <Link
-            className="px-5 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg"
-            to="/signup"
-          >
-            Sign up
-          </Link>
+         
+        {
+          user?  <button onClick={logout}
+          className="px-5 py-2 text-sm font-medium text-gray-600 bg-gray-100 rounded-lg"
+        >
+          Log out
+        </button> : <Link
+          className="px-5 py-2 text-sm font-medium text-gray-600 bg-gray-100 rounded-lg"
+          to="/login"
+        >
+          Log in
+        </Link>
+
+        }
         </div>
       </div>
 
       <div className="border-t border-gray-100 lg:hidden">
         <nav className="flex items-center justify-center p-4 overflow-x-auto text-sm font-medium">
-          <a
-            href="/about"
+          <Link
+            to='/home'
             className="block mr-2  h-16 leading-[4rem] border-b-4 border-transparent hover:text-red-700 hover:border-current"
           >
             Home
-          </a>
-          <a
-            href="/about"
-            className="block mx-2  h-16 leading-[4rem] border-b-4 border-transparent hover:text-red-700 hover:border-current"
-          >
-            Products
-          </a>
-
-          <a
-            href="/news"
+          </Link>
+          <Link
+           to="/to-do"
             className="block h-16 mx-2  leading-[4rem] border-b-4 border-transparent hover:text-red-700 hover:border-current"
           >
-            About Us
-          </a>
+            To-Do
+          </Link>
+          <Link
+            to="/complete-task"
+            className="block mx-2  h-16 leading-[4rem] border-b-4 border-transparent hover:text-red-700 hover:border-current"
+          >
+            Complete Task
+          </Link>
+
+          
 
 
-          <a
-            href="/contact"
+          <Link
+            to="/calender"
             className="block h-16 ml-2 leading-[4rem] border-b-4 border-transparent hover:text-red-700 hover:border-current"
           >
-            Contact
-          </a>
+            Calender
+          </Link>
         </nav>
       </div>
     </header>

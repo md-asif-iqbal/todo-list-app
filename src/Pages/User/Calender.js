@@ -1,11 +1,11 @@
 import React from 'react';
 
-const SocialLogin = () => {
+const Calender = () => {
     return (
         <div>
-            
+            This is Calender
         </div>
     );
 };
 
-export default SocialLogin;
+export default Calender;
