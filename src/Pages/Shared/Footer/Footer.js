@@ -7,7 +7,7 @@ const Footer = () => {
         <div className="max-w-screen-xl px-4 pt-16 pb-8 mx-auto sm:px-6 lg:px-8">
           <div className="max-w-md mx-auto">
             <strong className="block text-xl font-medium text-center text-white sm:text-3xl">
-              Want us to email you with the latest blockbuster news?
+              Want us to email you with the latest news?
             </strong>
 
             <form className="mt-6">

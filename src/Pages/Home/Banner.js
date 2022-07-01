@@ -11,26 +11,33 @@ import { useForm } from "react-hook-form";
 import { async } from "@firebase/util";
 const Banner = () => {
   const [edit, setEdit] = useState(null);
- const nameRef= useRef('')
- const desRef= useRef('')
- 
+  const [names, setNames] = useState("");
+  const [des, setDes] = useState("");
+  const nameRef = useRef("");
+  const desRef = useRef("");
+
+  const handleName = (event) => {
+    setNames(event.target.value);
+  };
+  const handleDes = (event) => {
+    setDes(event.target.value);
+  };
 
   const [user, loading] = useAuthState(auth);
   const { data, isLoading, refetch } = useQuery("data", () =>
-    fetch(`http://localhost:8000/task?email=${user.email}`).then((res) =>
-      res.json()
-    )
+    fetch(
+      `https://stark-harbor-77488.herokuapp.com/task?email=${user.email}`
+    ).then((res) => res.json())
   );
   const completeTask = (task) => {
     const id = task._id;
     console.log(id);
-    const url = `http://localhost:8000/task/${id}`;
+    const url = `https://stark-harbor-77488.herokuapp.com/task/${id}`;
     fetch(url, {
       method: "PUT",
       headers: {
         "content-type": "application/json",
       },
-      
     }).then((data) => {
       console.log(data);
       refetch();
@@ -41,46 +48,47 @@ const Banner = () => {
   if (isLoading || loading) {
     return <Loading />;
   }
-// Update Here
-const onUpdate=async(event)=>{
-  event.preventDefault();
-  const names = nameRef.current.value;
-  const description = desRef.current.value;
-    console.log(names);
-  const id = edit._id;
- 
-  const url = `http://localhost:8000/task/${id}`;
-  fetch(url, {
-    method: "PUT",
-    headers: {
-      "content-type": "application/json",
-    },
-    body: JSON.stringify(data)
-  }).then((data) => {
-    console.log(data);
-    refetch();
-    toast.success(`Congrat's your task is updated`);
-  });
- 
-  
-}
-  // Submit delete here
- const submitDelete=(edit)=>{
-  const id = edit._id;
-  const url =`http://localhost:8000/task/${id}`;
-  fetch(url, {
-      method: 'DELETE',
+  // Update Here
+  const onUpdate = async (event) => {
+    event.preventDefault();
+    const name = names;
+    const description = des;
+    console.log(name);
+    const id = edit._id;
+    const data = {
+      name: name,
+      description: description,
+    };
+    const url = `https://stark-harbor-77488.herokuapp.com/tasks/${id}`;
+    fetch(url, {
+      method: "PUT",
       headers: {
         "content-type": "application/json",
-      }
-  })
-  .then(res => res.json())
-  .then(data => {
-      toast('Your task is deleted');
-      refetch()
-      
-  })
- }
+      },
+      body: JSON.stringify(data),
+    }).then((data) => {
+      console.log(data);
+      refetch();
+      event.target.reset();
+      toast.success(`Congrat's your task is updated`);
+    });
+  };
+  // Submit delete here
+  const submitDelete = (edit) => {
+    const id = edit._id;
+    const url = `https://stark-harbor-77488.herokuapp.com/task/${id}`;
+    fetch(url, {
+      method: "DELETE",
+      headers: {
+        "content-type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        toast("Your task is deleted");
+        refetch();
+      });
+  };
   return (
     <div>
       <div
@@ -202,89 +210,82 @@ const onUpdate=async(event)=>{
                                 <input
                                   type="checkbox"
                                   id="my-modal-6"
-                                  class="modal-toggle"
+                                  className="modal-toggle"
                                 />
-                                <div class="modal modal-bottom sm:modal-middle">
-                                  <div class="modal-box text-black relative">
+                                <div className="modal modal-bottom sm:modal-middle">
+                                  <div className="modal-box text-black relative">
                                     <label
-                                      for="my-modal-6"
-                                      class="btn btn-sm btn-circle absolute right-2 top-2 hover:bg-green-600"
+                                      htmlFor="my-modal-6"
+                                      className="btn btn-sm btn-circle absolute right-2 top-2 hover:bg-green-600"
                                     >
                                       ✕
                                     </label>
                                     <div>
-                                    <form onSubmit={onUpdate} class="space-y-4">
-                                      
-                                      <input 
-                                        class="w-full lg:w-3/4 p-3 text-sm border input-accent rounded-lg"
-                                        placeholder="text"
-                                        type="text"
-                                        ref={nameRef}
-                                        />
-                                  <input 
-                                        class="w-full lg:w-3/4 p-3 text-sm border input-accent rounded-lg"
-                                        placeholder="text"
-                                        type="text"
-                                        ref={desRef}
-                                        />
-                                    
-                                    <div class="mt-4">
-                                      <button
-                                     
-                                        type="submit"
-                                        class="inline-flex items-center justify-center w-full px-5 py-3 text-white bg-black hover:bg-green-600 rounded-lg sm:w-auto"
+                                      <form
+                                        onSubmit={onUpdate}
+                                        className="space-y-4"
                                       >
-                                        <span class="font-medium">
-                                          Update Task
+                                        <input
+                                          className="w-full lg:w-3/4 p-3 text-sm border input-accent rounded-lg"
+                                          placeholder="text"
+                                          type="text"
+                                          onBlur={handleName}
+                                        />
+                                        <input
+                                          className="w-full lg:w-3/4 p-3 text-sm border input-accent rounded-lg"
+                                          placeholder="text"
+                                          type="text"
+                                          onBlur={handleDes}
+                                        />
+
+                                        <div className="mt-4">
+                                          <button className="inline-flex items-center justify-center w-full px-5 py-3 text-white bg-black hover:bg-green-600 rounded-lg sm:w-auto">
+                                            <span className="font-medium">
+                                              Update Task
+                                            </span>
+                                            <svg
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              className="w-5 h-5 ml-3"
+                                              fill="none"
+                                              viewBox="0 0 24 24"
+                                              stroke="currentColor"
+                                            >
+                                              <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth="2"
+                                                d="M14 5l7 7m0 0l-7 7m7-7H3"
+                                              />
+                                            </svg>
+                                          </button>
+                                        </div>
+                                      </form>
+                                    </div>
+                                    <div className="divider">OR</div>
+                                    <button className=" items-center justify-center w-full px-5 py-3 text-white bg-black hover:bg-rose-600 rounded-lg sm:w-auto">
+                                      <label
+                                        htmlFor="my-modal-6"
+                                        className="inline-flex"
+                                        onClick={() => submitDelete(edit)}
+                                      >
+                                        <span className="font-medium">
+                                          {" "}
+                                          Delete Task{" "}
                                         </span>
+
                                         <svg
+                                          className="w-5 h-5 ml-3"
                                           xmlns="http://www.w3.org/2000/svg"
-                                          class="w-5 h-5 ml-3"
-                                          fill="none"
-                                          viewBox="0 0 24 24"
-                                          stroke="currentColor"
+                                          viewBox="0 0 20 20"
+                                          fill="currentColor"
                                         >
                                           <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M14 5l7 7m0 0l-7 7m7-7H3"
+                                            fillRule="evenodd"
+                                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                            clipRule="evenodd"
                                           />
                                         </svg>
-                                      </button>
-                                    </div>
-                                  </form>
-                                    </div>
-                                    <div class="divider">OR</div>
-                                    <button
-                                      
-                                      
-                                      class=" items-center justify-center w-full px-5 py-3 text-white bg-black hover:bg-rose-600 rounded-lg sm:w-auto"
-                                    >
-                                      <label
-                                      for="my-modal-6"
-                                      class="inline-flex"
-                                      onClick={()=>submitDelete(edit)}
-                                    >
-                                      <span class="font-medium">
-                                        {" "}
-                                        Delete Task{" "}
-                                      </span>
-
-                                      <svg
-                                        class="w-5 h-5 ml-3"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 20 20"
-                                        fill="currentColor"
-                                      >
-                                        <path
-                                          fill-rule="evenodd"
-                                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                          clip-rule="evenodd"
-                                        />
-                                      </svg>
-                                    </label>
-                                      
+                                      </label>
                                     </button>
                                   </div>
                                 </div>
@@ -311,47 +312,89 @@ const onUpdate=async(event)=>{
 };
 
 export default Banner;
+
 {
-  /* <div class="modal modal-bottom sm:modal-middle text-black  w-72 h-full lg:h-auto lg:w-full">
-<div class="modal-box relative lg:mt-28  lg:mb-10 ">
+  /* <form onSubmit={onUpdate} className="space-y-4">
+                                      
+                                      <input 
+                                        className="w-full lg:w-3/4 p-3 text-sm border input-accent rounded-lg"
+                                        placeholder="text"
+                                        type="text"
+                                        ref={nameRef}
+                                        />
+                                  <input 
+                                        className="w-full lg:w-3/4 p-3 text-sm border input-accent rounded-lg"
+                                        placeholder="text"
+                                        type="text"
+                                        ref={desRef}
+                                        />
+                                    
+                                    <div className="mt-4">
+                                      <button
+                                        className="inline-flex items-center justify-center w-full px-5 py-3 text-white bg-black hover:bg-green-600 rounded-lg sm:w-auto"
+                                      >
+                                        <span className="font-medium">
+                                          Update Task
+                                        </span>
+                                        <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          className="w-5 h-5 ml-3"
+                                          fill="none"
+                                          viewBox="0 0 24 24"
+                                          stroke="currentColor"
+                                        >
+                                          <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="2"
+                                            d="M14 5l7 7m0 0l-7 7m7-7H3"
+                                          />
+                                        </svg>
+                                      </button>
+                                    </div>
+                                  </form> */
+}
+{
+  /* <div className="modal modal-bottom sm:modal-middle text-black  w-72 h-full lg:h-auto lg:w-full">
+<div className="modal-box relative lg:mt-28  lg:mb-10 ">
   <label
-    for="my-modal-6"
-    class="btn btn-sm btn-circle absolute right-2 top-2 hover:bg-green-600"
+    htmlFor="my-modal-6"
+    className="btn btn-sm btn-circle absolute right-2 top-2 hover:bg-green-600"
   >
     ✕
   </label>
   <div className="lg:mx-16">
-  <div class="form-control lg:w-full  ">
-    <label class="label">
-      <span class="label-text">Update task name</span>
+  <div className="form-control lg:w-full  ">
+    <label className="label">
+      <span className="label-text">Update task name</span>
 
     </label>
-    <input type="text" placeholder="Type here..." class="input input-bordered input-accent w-full max-w-xs" />
-    <label class="label">
-      <span class="label-text-alt">Old task-name: {edit?.name}</span>
+    <input type="text" placeholder="Type here..." className="input input-bordered input-accent w-full max-w-xs" />
+    <label className="label">
+      <span className="label-text-alt">Old task-name: {edit?.name}</span>
       
     </label>
   </div>
-  <div class="form-control w-full max-w-xs">
-    <label class="label">
-      <span class="label-text">Update task description</span>
+  <div className="form-control w-full max-w-xs">
+    <label className="label">
+      <span className="label-text">Update task description</span>
 
     </label>
-    <input type="text" placeholder="Type here..." class="input input-bordered input-accent w-full max-w-xs" />
-    <label class="label">
-      <span class="label-text-alt">Old task-description: {edit?.description}</span>
+    <input type="text" placeholder="Type here..." className="input input-bordered input-accent w-full max-w-xs" />
+    <label className="label">
+      <span className="label-text-alt">Old task-description: {edit?.description}</span>
       
     </label>
     <label
-      for="my-modal-6"
-      class="btn  hover:bg-green-600"
+      htmlFor="my-modal-6"
+      className="btn  hover:bg-green-600"
     >
       Update
     </label>
-    <div class="divider">OR</div>
+    <div className="divider">OR</div>
     <label
-      for="my-modal-6"
-      class="btn hover:bg-rose-600  px-10"
+      htmlFor="my-modal-6"
+      className="btn hover:bg-rose-600  px-10"
     >
       delete
     </label>

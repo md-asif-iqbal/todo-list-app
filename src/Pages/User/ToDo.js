@@ -1,47 +1,45 @@
 import React, { useRef } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 import { toast, ToastContainer } from "react-toastify";
 import auth from "../../firebase.init";
 import Loading from "../Shared/Loading/Loading";
 
 const ToDo = () => {
-    const [user, loading] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
   const taskName = useRef("");
   const taskDes = useRef("");
 
-if(loading){
-    return<Loading/>
-}
+  if (loading) {
+    return <Loading />;
+  }
   const taskSubmit = async (event) => {
     event.preventDefault();
     const name = taskName.current.value;
     const description = taskDes.current.value;
     const email = user.email;
-  
-    const data={
-        "name":name,
-        "description":description,
-        "email": email,
-    }
+
+    const data = {
+      name: name,
+      description: description,
+      email: email,
+    };
     console.log(data);
-    
-    const url =`http://localhost:8000/task`;
-    fetch(url,{
-        method: 'POST',
-        headers: {
-            'content-type': 'application/json',
-        },
-        body: JSON.stringify(data)
+
+    const url = `https://stark-harbor-77488.herokuapp.com/task`;
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(data),
     })
-    .then(res=> res.json())
-    .then(res =>{
-        toast.success('Congress!!! your task added');
+      .then((res) => res.json())
+      .then((res) => {
+        toast.success("Congress!!! your task added");
         console.log(res);
         event.target.reset();
-        
-    })
-    
+      });
   };
   return (
     <div>
@@ -55,7 +53,6 @@ if(loading){
             </p>
           </div>
           <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
-              
             <form onSubmit={taskSubmit}>
               <div className="card-body">
                 <div className="form-control">
@@ -82,7 +79,11 @@ if(loading){
                   />
                 </div>
                 <div className="form-control mt-6">
-                  <input className="btn btn-primary hover:bg-rose-600 hover:border-0" type="submit" value="Add Task"  />
+                  <input
+                    className="btn btn-primary hover:bg-rose-600 hover:border-0"
+                    type="submit"
+                    value="Add Task"
+                  />
                 </div>
               </div>
             </form>
