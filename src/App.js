@@ -26,7 +26,7 @@ function App() {
         </RequireAuth>
       }/>
         <Route path='/calender' element ={<RequireAuth>
-          <Calender/>
+          {/* <Calender/> */}
         </RequireAuth>
       }/>
 
